@@ -1,0 +1,50 @@
+.navbar {
+    background: url('http://english.peopledaily.com.cn/img/2013enpd/images/navbg.jpg') repeat-x scroll 0% 0% transparent;
+    height: 45px;
+    line-height: 45px;
+    font-size: 15px;
+    text-align: center;
+    color: #092036;
+}
+
+.one {
+	color: white;
+}
+
+.quicknavbar {
+	background: none repeat scroll 0% 0% #E2E6E9;
+	background-color: #E2E6E9;
+	background-image: none;
+	background-repeat: repeat;
+	background-attachment: scroll;
+	background-position: 0% 0%;
+	background-clip: border-box;
+	background-origin: padding-box;
+	background-size: auto auto;
+	height: 33px;
+	margin-top: 2px;
+}
+
+body {
+	
+}
+
+.news-board {
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	
+}
+
+.panel {
+	width: 300px;
+	height: 500px;
+	background-color: #F1F1F1;
+	border:1px solid #EBEBEB;
+	margin: 15px;
+	position: relative;
+	padding:10px;
+	border-radius: 4px;
+	float: left;
+
+}
