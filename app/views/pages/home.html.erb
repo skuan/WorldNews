@@ -14,12 +14,13 @@
 
 
 	<div class = "news-board">
+
 <!-- new panel -->
 		<div class = "panel">
 			
-			<h2 class = 'country-name'>
+			<h3 class = 'country-name'>
 				<a target='_blank' title='' href='http://www.usa.gov/visitors/about.shtml'>United States of America</a>
-			</h2>
+			</h3>
 
 			<div class= 'panel-body'>
 				<header>World</header>
@@ -88,14 +89,22 @@
 					</ul>
 			</div>
 		</div>
-<!-- new panel -->
+		
+<!-- RUSSIAN PANEL -->
 		<div class = 'panel'>
-			<h2 class = 'country-name'>
-				<a target='_blank' title='' href='http://www.usa.gov/visitors/about.shtml'>Russia</a>
-			</h2>
+			<h3 class = 'country-name'>
+				<a target='_blank' title='' href='http://www.russia.com'>Russia</a>
+			</h3>
 
 			<div class= 'panel-body'>
 				<header>World</header>
+
+				<ul><% @russian_times[@russian_times.length-3..@russian_times.length].each do |article| %>
+					<li><a href= 'http://rt.com/<%= article.url %>'><%= article.headline %></a></li>
+					<!-- <li><%= article.summary %></li> -->
+					<% end %>
+				</ul>
+				
 					<div class= 'article-container'>
 						<a class= 'article-media' href='http://www.yahoo.com'>
 							<img width='100' height='70' src=''></img>
@@ -167,21 +176,25 @@
 		</div>
 		
 
-<!-- new panel -->
+<!-- CHINA PANEL -->
 		<div class = 'panel'>
-			<h2 class = 'country-name'>
-				<a target='_blank' title='' href='http://www.usa.gov/visitors/about.shtml'>China</a>
-			</h2>
+			<h3 class = 'country-name'>
+				<a target='_blank' title='' href='http://www.china.com'>China</a>
+			</h3>
 
 			<div class= 'panel-body'>
+
+			<header>World</header>
 <!--experimental code -->
-				<% @peoples_daily.each do |article| %>
-				<%= article.headline %>
-				<%= article.summary %>
-				<%= article.url %>
+
+			<ul><% @peoples_daily[@peoples_daily.length-3..@peoples_daily.length].each do |article| %>
+				<li><a href= 'http://en.people.cn/<%= article.url %>'><%= article.headline %></a></li>
+				<!-- <li><%= article.summary %></li> -->
+				
 				<% end %>
+			</ul>
 <!--experimental code -->				
-				<header>World</header>
+				
 					<div class= 'article-container'>
 						<a class= 'article-media' href='http://www.yahoo.com'>
 							<img width='100' height='70' src=''></img>
@@ -253,9 +266,9 @@
 		</div>
 <!-- new panel -->
 		<div class = 'panel'>
-			<h2 class = 'country-name'>
+			<h3 class = 'country-name'>
 				<a target='_blank' title='' href='http://www.usa.gov/visitors/about.shtml'>Germany</a>
-			</h2>
+			</h3>
 
 			<div class= 'panel-body'>
 				<header>World</header>
@@ -329,9 +342,9 @@
 		</div>
 <!--new panel-->
 	<div class = 'panel'>
-			<h2 class = 'country-name'>
+			<h3 class = 'country-name'>
 				<a target='_blank' title='' href='http://www.usa.gov/visitors/about.shtml'>Germany</a>
-			</h2>
+			</h3>
 
 			<div class= 'panel-body'>
 				<header>World</header>
@@ -405,9 +418,9 @@
 		</div>	
 <!--new panel-->	
 		<div class = 'panel'>
-			<h2 class = 'country-name'>
+			<h3 class = 'country-name'>
 				<a target='_blank' title='' href='http://www.usa.gov/visitors/about.shtml'>Germany</a>
-			</h2>
+			</h3>
 
 			<div class= 'panel-body'>
 				<header>World</header>
