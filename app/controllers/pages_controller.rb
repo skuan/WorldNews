@@ -1,17 +1,17 @@
 class PagesController < ApplicationController
 
 	require 'rubygems'
-	require 'nokogiri'
-	require 'mechanize'
+	# require 'nokogiri'
+	# require 'mechanize'
 	require 'open-uri'
 	require 'csv'
-	require 'pry'
+	# require 'pry'
 
 	def home
 
 # CHINA PORTION
 
-	url = "http://english.peopledaily.com.cn/90777/index.html"
+	url = "http://en.people.cn/"
 	page = Nokogiri::HTML(open(url))
 
 	headline = []
@@ -32,13 +32,15 @@ class PagesController < ApplicationController
 
 	#body
 	mechanize = Mechanize.new
-	front_page = mechanize.get('http://english.peopledaily.com.cn/90777/index.html')
-	url.each do |body_link|
-		result_page = Mechanize::Page::Link.new(body_link, mechanize,front_page).click
+	front_page = mechanize.get('http://en.people.cn/')
+	body_links = front_page.search "//h3/a"
+	
+	body_links.each do |link|
+		result_page = Mechanize::Page::Link.new(link,mechanize,front_page).click
 
-		while result_page do
-			puts result_page.at("//*[@id='p_content']")
-			body << result_page.at("//*[@id='p_content']")
+		while result_page do 
+			puts result_page.at("//div[@id='p_content']")
+			body <<  result_page.at("//div[@id='p_content']").text
 		end
 	end
 
@@ -46,7 +48,8 @@ class PagesController < ApplicationController
 	(0..headline.length - 1).each do |index|
 		puts "headline: #{headline[index]}"
 		puts "description : #{description[index]}"
-		puts "link : #{url[index]}\n"  
+		puts "link : #{url[index]}\n" 
+		puts "body : #{body[index]}\n\n" 
 	end
 
 	#DATABASE
@@ -74,12 +77,14 @@ class PagesController < ApplicationController
 	page = Nokogiri::HTML(open(url))
 
 	headline = []
+	h = []
 	summary = []
 	url = []
 
 	#headline
 	page.css("dt").each do |dt|
-		headline << dt.text
+		h << dt.text
+		headline = h.delete("")
 	end
 
 	#summary
