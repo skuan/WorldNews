@@ -1,6 +1,6 @@
 class Russia < ActiveRecord::Base
 	validates_uniqueness_of :headline
-	validates :headline, :summary, :url, presence: true
+	validates :headline, :summary, :url, presence: true, :allow_blank => false
 
 
 	def self.dedupe

@@ -20,31 +20,28 @@ class PagesController < ApplicationController
 	body = []
 
 	#headline
-	page.css("h3 a").each do |title|
+	page.css("h2.p2_1.clear a").each do |title|
 		headline << title.text
 	end
-	#summary
-	page.css("div.on2.clear").each do |dd|
+	#description
+	page.css("p.p2_2.clear").each do |dd|
 		description << dd.text
 	end
 	#url
-	url = page.css('h3 a').map { |link| link['href'] }
+	url = page.css('h2.p2_1.clear a').map { |link| link['href'] }
 
 	#body
-	mechanize = Mechanize.new
-	front_page = mechanize.get('http://en.people.cn/')
-	body_links = front_page.search "//h3/a"
-	
-	body_links.each do |link|
-		result_page = Mechanize::Page::Link.new(link,mechanize,front_page).click
+	agent = Mechanize.new
+	mpage = agent.get('http://en.people.cn/')
+	body_links = mpage.links.find_all {|l| l.attributes.parent.name == 'h2'}
 
-		while result_page do 
-			puts result_page.at("//div[@id='p_content']")
-			body <<  result_page.at("//div[@id='p_content']").text
-		end
+	body_links.each do |l|
+		next_page = l.click
+		puts next_page.at("//div[@id='p_content']")
+		body << next_page.at("//div[@id='p_content']")
 	end
-
-
+	##############################
+	#CONSOLE
 	(0..headline.length - 1).each do |index|
 		puts "headline: #{headline[index]}"
 		puts "description : #{description[index]}"
@@ -54,14 +51,14 @@ class PagesController < ApplicationController
 
 	#DATABASE
 	(0..headline.length - 1).each do |index|
-		article = Pd.create(headline: headline[index], summary: description[index], url: url[index], body: body[index])
+		article = Pd.create(headline: headline[index], summary: description[index], url: url[index], body: body[index].text)
 	end
 
 	#CSV
 	CSV.open("pd.csv", "wb") do |row|
 		row << ["headline", "description", "link", "body"]
 		(0..headline.length - 1).each do |index|
-			row << [headline[index], description[index], url[index], body[index]]
+			row << [headline[index], description[index], url[index], body[index].text]
 		end
 	end
 
@@ -77,14 +74,13 @@ class PagesController < ApplicationController
 	page = Nokogiri::HTML(open(url))
 
 	headline = []
-	h = []
 	summary = []
 	url = []
+	body = []
 
 	#headline
 	page.css("dt").each do |dt|
-		h << dt.text
-		headline = h.delete("")
+		headline << dt.text
 	end
 
 	#summary
@@ -93,24 +89,39 @@ class PagesController < ApplicationController
 	end
 	summary.shift
 
-	# url issue with first url is just a, not a.header
+	#url issue with first url is just a, not a.header
 	url = page.css('dt a').map { |link| link['href'] }
 
+	#body
+	agent = Mechanize.new 
+	rtpage = agent.get('http://www.rt.com/news')
+	rt_links = rtpage.links.find_all {|l| l.attributes.parent.name == 'dl'}
+
+	rt_links.each do |l|
+		next_page = l.click
+		puts next_page.at("//p")
+		body << next_page.at("//p")
+	end
+
+
+###########################
+	#console
 	(0..summary.length - 1).each do |index|
 		puts "headline: #{headline[index]}"
 		puts "description : #{summary[index]}"
-		puts "link : #{url[index]}\n"  
+		puts "link : #{url[index]}\n"
+		puts "body : #{body[index]}\n"  
 	end
 	
 	#database
 	(0..headline.length - 1).each do |index|
-		article = Russia.create(headline: headline[index], summary: description[index], url: url[index])
+		article = Russia.create(headline: headline[index], summary: description[index], url: url[index], body: body[index])
 	end
 
 	CSV.open("rt.csv", "wb") do |row|
-		row << ["headline", "description", "link"]
+		row << ["headline", "description", "link", "body"]
 			(0..headline.length - 1).each do |index|
-				row << [headline[index], description[index], url[index]]
+				row << [headline[index], description[index], url[index], body[index]]
 		end
 	end
 
